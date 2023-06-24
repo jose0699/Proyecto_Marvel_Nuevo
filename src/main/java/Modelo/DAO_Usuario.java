@@ -15,11 +15,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.sql.CallableStatement;
+
 import java.text.SimpleDateFormat;
-import static java.time.Clock.system;
-import java.util.Date;
-import javax.swing.JOptionPane;
 import java.text.ParseException;
+
+import static java.time.Clock.system;
+import java.time.LocalDateTime;
+
+import java.util.Date;
+
+import javax.swing.JOptionPane;
 //fin de librerias a utilizar
 /**
  *
@@ -39,6 +46,11 @@ public int Toma_Tu_Valor (String valorBuscado, int caso){ // aqui simplemente bu
     switch (caso){
         case 1:
             sql="Select UID_Pais from pais where nombre= ? ;";
+            break;
+        
+        case 2:    
+            sql="Select codigo from membresia where tipo_membresia= ? ORDER BY Fecha_fin DESC LIMIT 1;";
+            break;
     }
     
     String url = "jdbc:postgresql://localhost:5432/Proyecto_Marvel";
@@ -112,7 +124,7 @@ public int Toma_Tu_Valor (String valorBuscado, int caso){ // aqui simplemente bu
             sql = "SELECT COUNT(*) FROM plataforma  WHERE Nombre = ?";
             break;
             
-         case 9: //membresia
+        /* case 9: //membresia
             sql = "SELECT Fecha_fin FROM Membresia WHERE Usuario = ? ORDER BY Fecha_inicio DESC LIMIT 1;";
             try (PreparedStatement statement = conexion.prepareStatement(sql)) {
                 statement.setString(1, valorBuscado);
@@ -126,7 +138,7 @@ public int Toma_Tu_Valor (String valorBuscado, int caso){ // aqui simplemente bu
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        break;
+        break;*/
             
         default:
             return false;
@@ -370,21 +382,32 @@ public void crearNuevoUsuario(String usuario, String correoElectronico, String p
         }
     }
 }//Fin de insertar un nuevo usuario
-    
-public void insertarMembresia(String tipoMembresia, float tarifa, String descripcion) {
+
+public void insertar_mensaulidad(String usuario_mensualidad, int codigoMembresia){
     String url = "jdbc:postgresql://localhost:5432/nombre_de_la_base_de_datos";
-    String usuario = "usuario";
-    String contrasena = "contraseña";
-    String sql = "INSERT INTO Membresia (Tipo_Membresia, Tarifa, Descripcion) VALUES (?, ?, ?)";
-    
+        String usuario = "usuario";
+        String contrasena = "contraseña";
+        String sql = "{CALL insertar_mensualidad(?,?,?,?)}";
+
     try (Connection conn = DriverManager.getConnection(url, usuario, contrasena);
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, tipoMembresia);
-        stmt.setFloat(2, tarifa);
-        stmt.setString(3, descripcion);
-        stmt.executeUpdate();
-    } catch (SQLException e) {
-        System.err.println("Error al insertar membresía: " + e.getMessage());
-    }
+        CallableStatement stmt = conn.prepareCall(sql)) {
+
+        // Establecer los parámetros del procedimiento almacenado
+            Timestamp fechaInicio = new Timestamp(System.currentTimeMillis());
+            Timestamp fechaFin = null; // o cualquier valor de fecha y hora           
+
+        stmt.setTimestamp(1, fechaInicio);
+        stmt.setTimestamp(2, fechaFin);
+        stmt.setString(3, usuario_mensualidad);
+        stmt.setInt(4, codigoMembresia);
+
+            // Ejecutar el procedimiento almacenado
+            stmt.execute();
+
+            System.out.println("Mensualidad insertada exitosamente.");
+
+        } catch (SQLException e) {
+            System.err.println("Error al insertar mensualidad: " + e.getMessage());
+        }
 }
 }

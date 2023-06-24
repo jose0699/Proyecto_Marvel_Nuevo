@@ -9,17 +9,19 @@ import Vista.Login;
 import Vista.Registrar_Usuario_Dos;
 import Vista.Cambiar_Contrasena;
 import Vista.Admin.Principal;
-
 //Fin de las Vistas
+
 //Controladores
 import Controlador_Proyecto.Controlador_Inicio.Controlador_Registrar;
-import Controlador_Proyecto.Controlador_Inicio.Controlador_Admin.Controlador_Principal;
-import Controlador_Proyecto.Controlador_Inicio.Controlador_Registrar;
+import Controlador_Proyecto.Controlador_Inicio.Controlador_Admin.Controlador_Admin;
+import Controlador_Proyecto.Controlador_Inicio.Controlador_Contrasena;
 //Fin de controladores
+
 //Comienzo de modelos
 import Modelo.ConexionBD;
 import Modelo.DAO_Usuario;
 //Fin de modelos
+
 //Librerias
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,7 +86,7 @@ public class Controlador_Login implements ActionListener{
                         login.Contrasena.getText(),1) || du.existe_Usuario_Y_Contraseña(login.Usuario.getText(), 
                         login.Contrasena.getText(),2)){  //Verificar si el usuario introdujo la contraseña correcta   
                             Principal p = new Principal();
-                            Controlador_Principal cp = new Controlador_Principal(p);
+                            Controlador_Admin cp = new Controlador_Admin(p);
                             p.setVisible(true);
                             login.setVisible(false);                            
                         }else {

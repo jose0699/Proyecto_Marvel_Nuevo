@@ -100,7 +100,7 @@ public class Registrar_Usuario extends javax.swing.JFrame {
 
         jLabel6.setText("Información del usuario");
 
-        jLabel7.setText("jLabel7");
+        jLabel7.setText("Registrar");
 
         Membresia.setText("Membresia ");
 

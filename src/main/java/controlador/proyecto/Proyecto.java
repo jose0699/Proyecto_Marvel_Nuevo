@@ -6,7 +6,7 @@
 package controlador.proyecto;
 
 //Vistas a invocar
-import Controlador_Proyecto.Controlador_Login;
+import Controlador_Proyecto.Controlador_Inicio.Controlador_Login;
 import Vista.Login;
 //Fin de Vista
 /**
